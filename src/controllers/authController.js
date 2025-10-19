@@ -4,6 +4,7 @@ const Technician = require("../models/Technician")
 async function register(req, res) {
   try {
     const { name, email, password, phone, role, speciality, degree, experience, about, availability, fees, address, isApproved } = req.body;
+    const image=req.file? req.file.path : "";
     if (!name || !email || !password) return res.status(400).json({ message: 'name, email, password required' });
 
     const exists = await User.findOne({ email });
@@ -17,6 +18,7 @@ async function register(req, res) {
         name,
         email,
         password,
+        image,
         phone,
         role: 'technician',
         speciality,
@@ -34,6 +36,7 @@ async function register(req, res) {
         name,
         email,
         password,
+        image,
         phone,
         role: role || 'customer'
       });
@@ -42,7 +45,7 @@ async function register(req, res) {
     const token = user.generateToken();
     res.status(201).json({
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role, isApproved: user.isApproved }
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, image: user.image, isApproved: user.isApproved }
     });
   } catch (err) {
     console.error(err);
@@ -65,7 +68,7 @@ async function login(req, res) {
     res.json({
       message: "Login successful",
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role, isApproved: user.isApproved }
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, image: user.image, isApproved: user.isApproved }
     });
   } catch (err) {
     console.error(err);
