@@ -44,4 +44,20 @@ async function updateStatus(req, res) {
   }
 }
 
-module.exports = { setAvailability, assignedBookings, updateStatus };
+const updateProfilePicTechnician = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
+
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.image = req.file.path; // Cloudinary URL
+    await user.save();
+
+    res.json({ message: 'Profile picture updated successfully', image: user.image });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+module.exports = { setAvailability, assignedBookings, updateStatus,updateProfilePicTechnician };
