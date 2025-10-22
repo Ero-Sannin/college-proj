@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Booking = require('../models/Booking');
+const Service = require('../models/Service');
 
 // get all users
 async function allUsers(req, res) {
@@ -61,4 +62,18 @@ async function allBookings(req, res) {
   }
 }
 
-module.exports = { allUsers,allTechnicians, approveTech, deleteUser, allBookings };
+async function addService(req,res){
+  try{
+    const service = await Service.create(req.body);
+    res.status(201).json({
+      success:true,
+      message:"Service created successfully",
+      data:service,
+    });
+  }
+  catch(error){
+    res.status(400).json({success:false,error:error.message});
+  }
+}
+
+module.exports = { allUsers,allTechnicians, approveTech, deleteUser, allBookings,addService };

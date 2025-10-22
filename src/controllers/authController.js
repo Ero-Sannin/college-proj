@@ -21,12 +21,11 @@ async function register(req, res) {
         image,
         phone,
         role: 'technician',
-        speciality,
+        services:services? services:[],
         degree,
         experience,
         about,
         availability,
-        fees,
         address,
         isApproved
       });

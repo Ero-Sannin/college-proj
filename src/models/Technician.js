@@ -4,15 +4,16 @@
 
 
     const technicianSchema = new mongoose.Schema({
-        speciality: { type: String, required: true },
         degree: { type: String, default: "none" },
         experience: { type: String, default: "none" },
         about: { type: String, required: "true" },
         availability: { type: Boolean, default: true },
-        fees: { type: Number, required: "true" },
         address: { type: Object, required: "true" },
         isApproved: { type: Boolean, default: false },  // admin approves technicians
-
+        services:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Service"
+        }],
     }, { timestamps: true });
 
 
