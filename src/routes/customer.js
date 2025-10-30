@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use(protect, authorize('customer'));
 
-router.get('profile',getMyProfile);
+router.get('/profile',getMyProfile);
 router.get('/technicians', listTechnicians);
 router.post('/book', bookTech);
 router.get('/bookings', myBookings);
