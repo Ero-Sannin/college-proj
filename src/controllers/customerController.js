@@ -74,8 +74,6 @@ const updateProfilePic = async (req, res) => {
   }
 };
 
-const User = require('../models/User');
-
 // Get logged-in user's profile
 const getMyProfile = async (req, res) => {
   try {
