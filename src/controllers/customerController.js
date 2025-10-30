@@ -73,4 +73,29 @@ const updateProfilePic = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-module.exports = { listTechnicians, bookTech, myBookings,updateProfilePic };
+
+const User = require('../models/User');
+
+// Get logged-in user's profile
+const getMyProfile = async (req, res) => {
+  try {
+    // Assuming you have middleware that sets req.user.id from the JWT
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+module.exports = { listTechnicians, bookTech, myBookings,updateProfilePic,getMyProfile };
