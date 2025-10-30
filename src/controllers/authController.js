@@ -35,8 +35,8 @@ async function register(req, res) {
         name,
         email,
         password,
-        image,
-        phone,
+        // image,
+        // phone,
         role: role || 'customer'
       });
     }
