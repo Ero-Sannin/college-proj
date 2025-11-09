@@ -7,11 +7,11 @@ const upload = require('../middleware/uploadMiddleware');
 
 const router = express.Router();
 
-router.get('/technicians',allTechnicians);
+
 router.use(protect, authorize('admin'));
 
 router.get('/users', allUsers);
-
+router.get('/technicians',allTechnicians);
 router.post('/addService',addService);
 router.patch('/technicians/:id/approve', approveTech);
 router.delete('/users/:id', deleteUser);

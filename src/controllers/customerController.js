@@ -95,5 +95,26 @@ const getMyProfile = async (req, res) => {
   }
 };
 
+async function getTechnicianById(req, res) {
+  try {
+    const { id } = req.params;
 
-module.exports = { listTechnicians, bookTech, myBookings,updateProfilePic,getMyProfile };
+    // Find technician by ID, exclude password, and populate related services
+    const technician = await User.findOne({ _id: id, role: "technician" })
+      .select('-password')
+      .populate('services'); // optional — remove if not needed
+
+    if (!technician) {
+      return res.status(404).json({ message: "Technician not found" });
+    }
+
+    res.json(technician);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+
+module.exports = { listTechnicians, bookTech, myBookings,updateProfilePic,getMyProfile,getTechnicianById};

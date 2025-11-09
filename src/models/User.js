@@ -9,6 +9,13 @@ const userSchema = new mongoose.Schema({
   image:{type:String,default:""},
   phone: { type: String,required:false},
   role: { type: String, enum: ['admin','customer','technician'], default: 'customer' },
+  address: {
+            province: { type: String },     // e.g. "Bagmati Province"
+            district: { type: String },     // e.g. "Kathmandu"
+            municipality: { type: String }, // e.g. "Kathmandu Metropolitan City"
+            ward: { type: Number },         // e.g. 10
+            tole: { type: String }          // e.g. "Baneshwor"
+        }
 }, { timestamps: true });
 
 // hash password before save
