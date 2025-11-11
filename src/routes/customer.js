@@ -7,7 +7,7 @@ const upload = require('../middleware/uploadMiddleware');
 const router = express.Router();
 
 router.get('/technicians', listTechnicians);
-router.get('/technicians/:id',getTechnicianById);
+router.get('/technicians/:techId',getTechnicianById);
 router.use(protect, authorize('customer'));
 
 router.get('/profile',getMyProfile);

@@ -97,10 +97,10 @@ const getMyProfile = async (req, res) => {
 
 async function getTechnicianById(req, res) {
   try {
-    const { id } = req.params;
+    const { techId } = req.params;
 
     // Find technician by ID, exclude password, and populate related services
-    const technician = await User.findOne({ _id: id, role: "technician" })
+    const technician = await User.findOne({ _id: techId, role: "technician" })
       .select('-password')
       .populate('services'); // optional — remove if not needed
 
