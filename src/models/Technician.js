@@ -9,7 +9,7 @@ const technicianSchema = new mongoose.Schema({
     about: { type: String, required: "true" },
     availability: { type: Boolean, default: true },
     isApproved: { type: Boolean, default: false },  // admin approves technicians
-    services: {
+    serviceId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",
         required: true
