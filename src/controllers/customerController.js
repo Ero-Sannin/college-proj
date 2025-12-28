@@ -50,9 +50,17 @@ async function bookTech(req, res) {
 // get customer's bookings
 async function myBookings(req, res) {
   try {
-    const bookings = (await Booking.find({ customerId: req.user._id }).populate('technicianId', 'name phone skills').populate('serviceId')).sort({date:-1});
+    const bookings = await Booking.find({ customerId: req.user._id })
+      .populate({
+        path: "technicianId",
+        select: "-password",   // 👈 only this line matters
+      })
+      .populate('serviceId')
+      .sort({ date: -1 });
     res.json(bookings);
+    console.log(bookings);
   } catch (err) {
+    console.error('Error in myBookings:', err);
     res.status(500).json({ message: 'Server error' });
   }
 }
@@ -115,6 +123,24 @@ async function getTechnicianById(req, res) {
   }
 }
 
+async function cancelBooking(req, res) {
+  try {
+    const { bookingId } = req.params;
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    if (booking.customerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to cancel this booking' });
+    }
+    booking.status = 'cancelled';
+    await booking.save();
+    res.json({ message: 'Booking cancelled successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+   }
+}
 
 
-module.exports = { listTechnicians, bookTech, myBookings,updateProfilePic,getMyProfile,getTechnicianById};
+module.exports = { listTechnicians, bookTech, myBookings, updateProfilePic, getMyProfile, getTechnicianById,cancelBooking};
