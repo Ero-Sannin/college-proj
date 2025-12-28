@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Booking = require('../models/Booking');
 const Service = require('../models/Service');
+const Technician = require('../models/Technician');
 
 // list available technicians (approved + availability true)
 async function listTechnicians(req, res) {
@@ -108,9 +109,9 @@ async function getTechnicianById(req, res) {
     const { techId } = req.params;
 
     // Find technician by ID, exclude password, and populate related services
-    const technician = await User.findOne({ _id: techId, role: "technician" })
+    const technician = await Technician.findOne({ _id: techId, role: "technician" })
       .select('-password')
-      .populate('services'); // optional — remove if not needed
+      .populate('serviceId'); // optional — remove if not needed
 
     if (!technician) {
       return res.status(404).json({ message: "Technician not found" });
