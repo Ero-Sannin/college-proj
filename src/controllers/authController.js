@@ -3,55 +3,93 @@ const Technician = require("../models/Technician")
 
 async function register(req, res) {
   try {
-    const { name, email, password, phone, role, service, degree, experience, about, availability, address, isApproved } = req.body;
-    const image=req.file? req.file.path : "";
-    if (!name || !email || !password) return res.status(400).json({ message: 'name, email, password required' });
+    const {
+      name,
+      email,
+      password,
+      phone,
+      role,
+      serviceId,
+      degree,
+      experience,
+      about,
+      availability,
+      address
+    } = req.body;
+
+    const image = req.file ? req.file.path : "";
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "name, email, password required" });
+    }
 
     const exists = await User.findOne({ email });
-    if (exists) return res.status(400).json({ message: 'Email already registered' });
+    if (exists) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
 
     let user;
 
-    if (role === 'technician') {
-      // Create technician using discriminator
+    // 🔒 Technician registration
+    if (role === "technician") {
+
+      if (!serviceId || !about) {
+        return res.status(400).json({
+          message: "serviceId and about are required for technicians"
+        });
+      }
+
       user = await Technician.create({
         name,
         email,
         password,
         image,
         phone,
-        role: 'technician',
-        service,
+        role: "technician",
+        serviceId,
         degree,
         experience,
         about,
         availability,
         address,
-        isApproved
+        isApproved: false // 🔐 forced
       });
+
     } else {
-      // Create regular customer/admin
+      // 🔒 Customer only
       user = await User.create({
         name,
         email,
         password,
         image,
-        address,
         phone,
-        role: role || 'customer'
+        address,
+        role: "customer"
       });
     }
 
     const token = user.generateToken();
+
     res.status(201).json({
+      success: true,
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role, image: user.image, isApproved: user.isApproved,address:user.address}
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        image: user.image,
+        isApproved: user.isApproved,
+        address: user.address
+      }
     });
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 }
+
 
 async function login(req, res) {
   try {
@@ -68,7 +106,7 @@ async function login(req, res) {
     res.json({
       message: "Login successful",
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role, image: user.image, isApproved: user.isApproved,address:user.address}
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, image: user.image, isApproved: user.isApproved, address: user.address }
     });
   } catch (err) {
     console.error(err);
