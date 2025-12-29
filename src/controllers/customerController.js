@@ -27,7 +27,7 @@ async function bookTech(req, res) {
     if (!service) {
       return res.status(400).json({ message: "Service not found" });
     }
-    const existing = await Booking.findOne({ technicianId, date });
+    const existing = await Booking.findOne({ technicianId, date, status: "pending" });
     if (existing) {
       return res.status(400).json({ message: 'Technician already booked for this date' });
     }
