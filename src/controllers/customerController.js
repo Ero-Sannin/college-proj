@@ -59,7 +59,6 @@ async function myBookings(req, res) {
       .populate('serviceId')
       .sort({ date: -1 });
     res.json(bookings);
-    console.log(bookings);
   } catch (err) {
     console.error('Error in myBookings:', err);
     res.status(500).json({ message: 'Server error' });
