@@ -88,7 +88,7 @@ const getMyProfile = async (req, res) => {
     // Assuming you have middleware that sets req.user.id from the JWT
     const userId = req.user.id;
 
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(userId).select('-password').populate('serviceId');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

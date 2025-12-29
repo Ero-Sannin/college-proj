@@ -17,7 +17,10 @@ async function setAvailability(req, res) {
 // assigned bookings
 async function assignedBookings(req, res) {
   try {
-    const bookings = await Booking.find({ technicianId: req.user._id }).populate('customerId', 'name phone');
+    const bookings = await Booking.find({ technicianId: req.user._id }).populate({
+        path: 'customerId',
+        select: '-password'  // include all fields except password
+      });
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
