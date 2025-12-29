@@ -76,4 +76,38 @@ async function addService(req,res){
   }
 }
 
-module.exports = { allUsers,allTechnicians, approveTech, deleteUser, allBookings,addService };
+async function createAdmin(req, res) {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const exists = await User.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const admin = await User.create({
+      name,
+      email,
+      password,
+      role: "admin"
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Admin created successfully",
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+module.exports = { allUsers,allTechnicians,createAdmin, approveTech, deleteUser, allBookings,addService };

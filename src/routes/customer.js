@@ -8,9 +8,11 @@ const router = express.Router();
 
 router.get('/technicians', listTechnicians);
 router.get('/technicians/:techId',getTechnicianById);
-router.use(protect, authorize('customer'));
-
+router.use(protect);
 router.get('/profile',getMyProfile);
+router.use(authorize('customer'));
+
+
 
 router.post('/book', bookTech);
 router.get('/bookings', myBookings);
